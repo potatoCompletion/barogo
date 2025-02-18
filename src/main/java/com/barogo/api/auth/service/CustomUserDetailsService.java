@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map(user -> new org.springframework.security.core.userdetails.User(
                         user.getUserId(),
                         user.getPassword(),
-                        Collections.emptyList() // ✅ 권한 없음
+                        Collections.emptyList()
                 ))
                 .orElseThrow(() -> new InvalidUserException());
     }
