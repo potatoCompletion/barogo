@@ -42,12 +42,12 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("정상 회원가입 테스트")
+    @DisplayName("회원가입 API - 정상 요청")
     void 회원가입_테스트() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .userId("testId")
-                .password("testPassword")
+                .password("testPassword123!@#")
                 .name("김완수")
                 .build();
 
@@ -61,7 +61,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입 시에 SignUpRequest는 빈 값일 수 없다.")
+    @DisplayName("회원가입 API - 빈 객체 요청")
     void 빈값_회원가입_테스트() throws Exception {
         // given
         SignUpRequest request = SignUpRequest.builder()
@@ -85,7 +85,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("중복 아이디 회원가입 시 BAD_REQUEST를 반환한다")
+    @DisplayName("회원가입 API - 중복 아이디")
     void 중복_아이디_회원가입_테스트() throws Exception {
         // given
         User user = User.builder()
@@ -116,7 +116,29 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("정상 로그인 테스트")
+    @DisplayName("회원가입 API - 비밀번호 규칙 미준수")
+    void 비밀번호_규칙_미준수_회원가입_테스트() throws Exception {
+        // given
+        SignUpRequest request = SignUpRequest.builder()
+                .userId("testId")
+                .password("testPassword")
+                .name("김완수")
+                .build();
+
+        String jsonRequest = objectMapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(post("/api/v1/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(jsonPath("$.errorCode").value("PASSWORD_POLICY_VIOLATION"))
+                .andExpect(jsonPath("$.message").value("비밀번호는 영어 대문자, 영어 소문자, 숫자, 특수문자 중 3종류 이상으로 12자리 이상의 문자열로 생성해야 합니다."));
+    }
+
+    @Test
+    @DisplayName("로그인 API - 정상 요청")
     void 로그인_테스트() throws Exception {
         // given
         User user = User.builder()
@@ -139,11 +161,12 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").isNotEmpty());
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andDo(print());
     }
 
     @Test
-    @DisplayName("로그인 시에 LoginRequest는 빈 값일 수 없다.")
+    @DisplayName("로그인 API - 빈 객체 요청")
     void 빈값_로그인_테스트() throws Exception {
         // given
         LoginRequest request = LoginRequest.builder()
@@ -166,7 +189,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("요청한 로그인 정보가 DB에 없을 시 BAD_REQUEST를 반환한다.")
+    @DisplayName("로그인 API - 존재하지 않는 아이디")
     void 없는유저_로그인_테스트() throws Exception {
         // given
         User user = User.builder()
@@ -188,15 +211,15 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value("400"))
-                .andExpect(jsonPath("$.errorCode").value("USER_NOT_FOUND"))
-                .andExpect(jsonPath("$.message").value("해당 사용자를 찾을 수 없습니다."))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value("401"))
+                .andExpect(jsonPath("$.errorCode").value("INVALID_CREDENTIAL"))
+                .andExpect(jsonPath("$.message").value("아이디가 존재하지 않거나 비밀번호가 틀렸습니다."))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("비밀번호가 틀렸을 시 BAD_REQUEST를 반환한다.")
+    @DisplayName("로그인 API - 비밀번호 오류")
     void 잘못된_비밀번호_로그인_테스트() throws Exception {
         // given
         User user = User.builder()
@@ -218,8 +241,8 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.statusCode").value("400"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.statusCode").value("401"))
                 .andExpect(jsonPath("$.errorCode").value("INVALID_PASSWORD"))
                 .andExpect(jsonPath("$.message").value("비밀번호가 틀렸습니다."))
                 .andDo(print());

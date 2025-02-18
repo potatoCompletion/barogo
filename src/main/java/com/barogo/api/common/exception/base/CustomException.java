@@ -1,4 +1,4 @@
-package com.barogo.api.common.exception;
+package com.barogo.api.common.exception.base;
 
 import lombok.Getter;
 

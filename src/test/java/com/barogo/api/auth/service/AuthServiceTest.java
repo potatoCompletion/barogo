@@ -1,8 +1,9 @@
 package com.barogo.api.auth.service;
 
 import com.barogo.api.auth.exception.InvalidPasswordException;
+import com.barogo.api.auth.exception.PasswordPolicyViolationException;
 import com.barogo.api.auth.exception.UserIdDuplicatedException;
-import com.barogo.api.auth.exception.UserNotFoundException;
+import com.barogo.api.auth.exception.InvalidCredentialException;
 import com.barogo.api.auth.request.LoginRequest;
 import com.barogo.api.auth.request.SignUpRequest;
 import com.barogo.api.auth.response.TokenResponse;
@@ -35,12 +36,12 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("정상 회원가입 테스트")
+    @DisplayName("회원가입 - 정상 요청")
     void 회원가입_테스트() {
         // given
         SignUpRequest request = SignUpRequest.builder()
                 .userId("testId")
-                .password("testPassword")
+                .password("testPassword123!@#")
                 .name("김완수")
                 .build();
 
@@ -51,12 +52,12 @@ class AuthServiceTest {
         //then
         assertEquals(1, userRepository.count());
         assertEquals("testId", user.getUserId());
-        assertTrue(passwordEncoder.matches("testPassword", user.getPassword()));
+        assertTrue(passwordEncoder.matches("testPassword123!@#", user.getPassword()));
         assertEquals("김완수", user.getName());
     }
 
     @Test
-    @DisplayName("중복 아이디 회원가입 시 UserIdDuplicatedException을 반환한다")
+    @DisplayName("회원가입 - 중복 아이디(UserIdDuplicatedException)")
     void 중복_아이디_회원가입_테스트() {
         // given
         User user = User.builder()
@@ -82,7 +83,25 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("정상 로그인 테스트")
+    @DisplayName("회원가입 - 비밀번호 규칙 미준수(PasswordPolicyViolationException)")
+    void 비밀번호_규칙_미준수_회원가입_테스트() {
+        // given
+        SignUpRequest wrongPasswordRequest = SignUpRequest.builder()
+                .userId("testId")
+                .password("testPassword")
+                .name("김완수")
+                .build();
+
+        // expected
+        PasswordPolicyViolationException e = assertThrows(PasswordPolicyViolationException.class, () -> {
+            authService.signUp(wrongPasswordRequest);
+        });
+
+        assertEquals("비밀번호는 영어 대문자, 영어 소문자, 숫자, 특수문자 중 3종류 이상으로 12자리 이상의 문자열로 생성해야 합니다.", e.getErrorCode().getMessage());
+    }
+
+    @Test
+    @DisplayName("로그인 - 정상 요청")
     void 로그인_테스트() {
         // given
         User user = User.builder()
@@ -106,7 +125,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("없는 아이디로 로그인한 경우 UserNotFoundException을 반환한다.")
+    @DisplayName("로그인 - 존재하지 않는 아이디(InvalidCredentialException)")
     void 없는_아이디_로그인_테스트() {
         // given
         LoginRequest loginRequest = LoginRequest.builder()
@@ -115,16 +134,16 @@ class AuthServiceTest {
                 .build();
 
         // expected
-        UserNotFoundException e = assertThrows(UserNotFoundException.class, () -> {
+        InvalidCredentialException e = assertThrows(InvalidCredentialException.class, () -> {
             authService.login(loginRequest);
         });
 
-        assertEquals("해당 사용자를 찾을 수 없습니다.", e.getErrorCode().getMessage());
+        assertEquals("아이디가 존재하지 않거나 비밀번호가 틀렸습니다.", e.getErrorCode().getMessage());
     }
 
     @Test
-    @DisplayName("잘못된 비밀번호로 로그인한 경우 InvalidPasswordException을 반환한다.")
-    void 잘못된_비밀번호_로그인_테스트() {
+    @DisplayName("로그인 - 비밀번호 오류(InvalidPasswordException)")
+    void 틀린_비밀번호_로그인_테스트() {
         // given
         User user = User.builder()
                 .userId("testId")

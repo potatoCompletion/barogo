@@ -4,13 +4,9 @@ import com.barogo.api.user.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class SignUpRequest {
 
     @NotBlank(message = "id를 입력해주세요.")

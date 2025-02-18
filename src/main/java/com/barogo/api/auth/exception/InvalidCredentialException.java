@@ -3,9 +3,9 @@ package com.barogo.api.auth.exception;
 import com.barogo.api.common.exception.base.CustomException;
 import com.barogo.api.common.exception.base.ErrorCode;
 
-public class InvalidPasswordException extends CustomException {
+public class InvalidCredentialException extends CustomException {
 
-    public InvalidPasswordException() {
-        super(ErrorCode.INVALID_PASSWORD);
+    public InvalidCredentialException() {
+        super(ErrorCode.INVALID_CREDENTIAL);
     }
 }

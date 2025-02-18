@@ -1,14 +1,16 @@
 package com.barogo.api.auth.service;
 
+import com.barogo.api.auth.exception.InvalidCredentialException;
 import com.barogo.api.auth.exception.InvalidPasswordException;
-import com.barogo.api.auth.exception.UserNotFoundException;
+import com.barogo.api.auth.exception.PasswordPolicyViolationException;
+import com.barogo.api.auth.exception.UserIdDuplicatedException;
 import com.barogo.api.auth.request.LoginRequest;
 import com.barogo.api.auth.request.SignUpRequest;
 import com.barogo.api.auth.response.TokenResponse;
-import com.barogo.api.auth.exception.UserIdDuplicatedException;
+import com.barogo.api.common.util.PasswordValidator;
 import com.barogo.api.user.domain.User;
 import com.barogo.api.user.repository.UserRepository;
-import com.barogo.config.JwtTokenProvider;
+import com.barogo.api.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,11 @@ public class AuthService {
             throw new UserIdDuplicatedException();
         }
 
+        // 패스워드 규칙 검증
+        if (!PasswordValidator.isValid(signUpRequest.getPassword())) {
+            throw new PasswordPolicyViolationException();
+        }
+
         User user = signUpRequest.toUser(passwordEncoder);
         userRepository.save(user);
     }
@@ -34,7 +41,7 @@ public class AuthService {
     public TokenResponse login(LoginRequest loginRequest) {
         // 유저 찾기
         User user = userRepository.findByUserId(loginRequest.getUserId())
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(InvalidCredentialException::new);
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
