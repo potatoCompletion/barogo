@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(response.statusCode()).body(response);
     }
 
+    // Request json 오류
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> httpMessageNotReadableHandler(HttpMessageNotReadableException e, HttpServletRequest request) {
         ErrorResponse response = ErrorResponse.builder()
