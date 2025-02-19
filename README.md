@@ -7,9 +7,9 @@ build tool: Gradle
 DB: H2
 
 ## DB 접속정보
-path: localhost:8080/h2-console
-url: jdbc:h2:mem:barogo
-username: sa
+path: localhost:8080/h2-console  
+url: jdbc:h2:mem:barogo  
+username: sa  
 password: (없음)
 
 ## API 명세서
