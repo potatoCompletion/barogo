@@ -5,6 +5,8 @@ import com.barogo.api.common.exception.base.ErrorCode;
 import com.barogo.api.common.exception.base.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +30,31 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .errorCode(ErrorCode.INVALID_REQUEST_PARAM)
                 .errorList(errorList)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(response.statusCode()).body(response);
+    }
+
+    // HTTP Method 잘못 요청
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> methodNotAllowedHandler(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
+        ErrorResponse response = ErrorResponse.builder()
+                .path(request.getRequestURI())
+                .errorCode(ErrorCode.METHOD_NOT_ALLOWED)
+                .errorList(List.of(e.getMessage()))
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(response.statusCode()).body(response);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> httpMessageNotReadableHandler(HttpMessageNotReadableException e, HttpServletRequest request) {
+        ErrorResponse response = ErrorResponse.builder()
+                .path(request.getRequestURI())
+                .errorCode(ErrorCode.JSON_NOT_READABLE)
+                .errorList(List.of(e.getMessage()))
                 .timestamp(LocalDateTime.now())
                 .build();
 

@@ -12,10 +12,10 @@ import com.barogo.api.delivery.response.DeliveryResponse;
 import com.barogo.api.user.domain.User;
 import com.barogo.api.user.exception.UserNotFoundException;
 import com.barogo.api.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,13 +28,14 @@ public class DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public Page<DeliveryResponse> getUserDeliveries(String userId, DeliverySearchRequest request) {
         // 유저 찾기
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         // 조회 일자 검증 (최대 3일)
-        if (ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) > 3) {
+        if (ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) > 2) {
             throw new InvalidDateRangeException(ErrorCode.INVALID_DELIVERY_DATE);
         }
 
@@ -54,7 +55,7 @@ public class DeliveryService {
     }
 
     @Transactional
-    public void updateDestination(String userId, Long deliveryId, DeliveryUpdateRequest request) {
+    public void updateDelivery(String userId, Long deliveryId, DeliveryUpdateRequest request) {
         // 유저 찾기
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);

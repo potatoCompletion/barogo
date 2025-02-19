@@ -3,6 +3,7 @@ package com.barogo.api.delivery.controller;
 import com.barogo.api.delivery.request.DeliverySearchRequest;
 import com.barogo.api.delivery.request.DeliveryUpdateRequest;
 import com.barogo.api.delivery.response.DeliveryResponse;
+import com.barogo.api.delivery.response.DeliveryUpdateResponse;
 import com.barogo.api.delivery.service.DeliveryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,13 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveries);
     }
 
-    @PatchMapping("/{deliveryId}/destination")
-    public ResponseEntity<String> updateDeliveryDestination(
+    @PatchMapping("/{deliveryId}")
+    public ResponseEntity<DeliveryUpdateResponse> updateDelivery(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long deliveryId,
             @RequestBody @Valid DeliveryUpdateRequest request) {
 
-        deliveryService.updateDestination(userDetails.getUsername(), deliveryId, request);
-        return ResponseEntity.ok("도착지 주소가 성공적으로 변경되었습니다.");
+        deliveryService.updateDelivery(userDetails.getUsername(), deliveryId, request);
+        return ResponseEntity.ok(new DeliveryUpdateResponse("도착지 주소가 성공적으로 변경되었습니다."));
     }
 }

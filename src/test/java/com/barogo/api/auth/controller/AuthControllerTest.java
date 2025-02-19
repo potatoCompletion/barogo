@@ -142,16 +142,16 @@ class AuthControllerTest {
     void 로그인_테스트() throws Exception {
         // given
         User user = User.builder()
-                .userId("testId")
-                .password(passwordEncoder.encode("testPassword"))
+                .userId("testuser")
+                .password(passwordEncoder.encode("testPassword123!@#"))
                 .name("김완수")
                 .build();
 
         userRepository.save(user);
 
         LoginRequest request = LoginRequest.builder()
-                .userId("testId")
-                .password("testPassword")
+                .userId("testuser")
+                .password("testPassword123!@#")
                 .build();
 
         String jsonRequest = objectMapper.writeValueAsString(request);
@@ -193,8 +193,8 @@ class AuthControllerTest {
     void 없는유저_로그인_테스트() throws Exception {
         // given
         User user = User.builder()
-                .userId("testId")
-                .password(passwordEncoder.encode("testPassword"))
+                .userId("testuser")
+                .password(passwordEncoder.encode("testPassword123!@#"))
                 .name("김완수")
                 .build();
 
@@ -223,15 +223,15 @@ class AuthControllerTest {
     void 잘못된_비밀번호_로그인_테스트() throws Exception {
         // given
         User user = User.builder()
-                .userId("testId")
-                .password(passwordEncoder.encode("testPassword"))
+                .userId("testuser")
+                .password(passwordEncoder.encode("testPassword123!@#"))
                 .name("김완수")
                 .build();
 
         userRepository.save(user);
 
         LoginRequest request = LoginRequest.builder()
-                .userId("testId")
+                .userId("testuser")
                 .password("wrongPassword")
                 .build();
 

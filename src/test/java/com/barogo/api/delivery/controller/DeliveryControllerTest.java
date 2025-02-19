@@ -86,7 +86,7 @@ class DeliveryControllerTest {
     @DisplayName("배달 조회 API - 정상 요청")
     void 배달_조회_테스트() throws Exception {
         // given
-        LocalDate startDate = LocalDate.now().minusDays(3);
+        LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
 
         // expected
@@ -104,7 +104,7 @@ class DeliveryControllerTest {
     @DisplayName("배달 조회 API - 페이지 기본값")
     void 배달_조회_페이지_기본값_테스트() throws Exception {
         // given
-        LocalDate startDate = LocalDate.now().minusDays(3);
+        LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
 
         // expected
@@ -175,13 +175,13 @@ class DeliveryControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(patch("/api/v1/deliveries/{targetId}/destination", targetId)
+        mockMvc.perform(patch("/api/v1/deliveries/{targetId}", targetId)
                         .header("Authorization", "Bearer " + testToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string("도착지 주소가 성공적으로 변경되었습니다."))
+                .andExpect(jsonPath("$.message").value("도착지 주소가 성공적으로 변경되었습니다."))
                 .andDo(print());
 
         String updatedDestination = deliveryRepository.findById(targetId).orElseThrow().getDestination();
@@ -207,7 +207,7 @@ class DeliveryControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(patch("/api/v1/deliveries/{targetId}/destination", targetId)
+        mockMvc.perform(patch("/api/v1/deliveries/{targetId}", targetId)
                         .header("Authorization", "Bearer " + testToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
@@ -238,7 +238,7 @@ class DeliveryControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(patch("/api/v1/deliveries/{targetId}/destination", targetId)
+        mockMvc.perform(patch("/api/v1/deliveries/{targetId}", targetId)
                         .header("Authorization", "Bearer " + testToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)
@@ -263,7 +263,7 @@ class DeliveryControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(request);
 
         // expected
-        mockMvc.perform(patch("/api/v1/deliveries/{targetId}/destination", targetId)
+        mockMvc.perform(patch("/api/v1/deliveries/{targetId}", targetId)
                         .header("Authorization", "Bearer " + testToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest)

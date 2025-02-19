@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     // 400(BAD_REQUEST)
     INVALID_REQUEST_PARAM(HttpStatus.BAD_REQUEST, "요청 검증 실패했습니다."),
+    JSON_NOT_READABLE(HttpStatus.BAD_REQUEST, "잘못된 요청 형식입니다. JSON을 확인하세요."),
     USER_ID_DUPLICATED(HttpStatus.BAD_REQUEST, "아이디가 중복됩니다."),
     PASSWORD_POLICY_VIOLATION(HttpStatus.BAD_REQUEST, "비밀번호는 영어 대문자, 영어 소문자, 숫자, 특수문자 중 3종류 이상으로 12자리 이상의 문자열로 생성해야 합니다."),
     INVALID_DELIVERY_DATE(HttpStatus.BAD_REQUEST, "조회 가능한 기간은 최대 3일까지 가능합니다."),
@@ -27,6 +28,9 @@ public enum ErrorCode {
     // 404(NOT_FOUND)
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     DELIVERY_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 배달 주문을 찾을 수 없습니다."),
+
+    // 405(METHOD_NOT_ALLOWED)
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원되지 않는 HTTP 메서드입니다."),
 
     // 500(INTERNAL_SERVER_ERROR)
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 에러가 발생했습니다.");

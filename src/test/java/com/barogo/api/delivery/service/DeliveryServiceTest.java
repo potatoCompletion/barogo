@@ -74,21 +74,21 @@ class DeliveryServiceTest {
         DeliverySearchRequest request1 = DeliverySearchRequest.builder()
                 .page(0)
                 .size(10)
-                .startDate(LocalDate.now().minusDays(3))
+                .startDate(LocalDate.now().minusDays(2))
                 .endDate(LocalDate.now())
                 .build();
 
         DeliverySearchRequest request2 = DeliverySearchRequest.builder()
                 .page(1)
                 .size(10)
-                .startDate(LocalDate.now().minusDays(3))
+                .startDate(LocalDate.now().minusDays(2))
                 .endDate(LocalDate.now())
                 .build();
 
         DeliverySearchRequest request3 = DeliverySearchRequest.builder()
                 .page(2)
                 .size(10)
-                .startDate(LocalDate.now().minusDays(3))
+                .startDate(LocalDate.now().minusDays(2))
                 .endDate(LocalDate.now())
                 .build();
 
@@ -168,7 +168,7 @@ class DeliveryServiceTest {
                 .build();
 
         // when
-        deliveryService.updateDestination(TEST_ID, deliveryId, request);
+        deliveryService.updateDelivery(TEST_ID, deliveryId, request);
         Delivery updatedDelivery = deliveryRepository.findById(deliveryId).orElseThrow();
 
         // then
@@ -193,7 +193,7 @@ class DeliveryServiceTest {
 
         // expected
         UserNotFoundException e = assertThrows(UserNotFoundException.class, () -> {
-            deliveryService.updateDestination(NON_EXISTENT_ID, deliveryId, request);
+            deliveryService.updateDelivery(NON_EXISTENT_ID, deliveryId, request);
         });
 
         assertEquals("해당 유저를 찾을 수 없습니다.", e.getErrorCode().getMessage());
@@ -217,7 +217,7 @@ class DeliveryServiceTest {
 
         // expected
         DeliveryNotFoundException e = assertThrows(DeliveryNotFoundException.class, () -> {
-            deliveryService.updateDestination(TEST_ID, wrongDeliveryId, request);
+            deliveryService.updateDelivery(TEST_ID, wrongDeliveryId, request);
         });
 
         assertEquals("해당 배달 주문을 찾을 수 없습니다.", e.getErrorCode().getMessage());
@@ -248,7 +248,7 @@ class DeliveryServiceTest {
 
         // expected
         DeliveryNotFoundException e = assertThrows(DeliveryNotFoundException.class, () -> {
-            deliveryService.updateDestination("anotherId", deliveryId, request);
+            deliveryService.updateDelivery("anotherId", deliveryId, request);
         });
 
         assertEquals("해당 배달 주문을 찾을 수 없습니다.", e.getErrorCode().getMessage());

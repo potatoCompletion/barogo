@@ -2,6 +2,7 @@ package com.barogo.api.auth.controller;
 
 import com.barogo.api.auth.request.LoginRequest;
 import com.barogo.api.auth.request.SignUpRequest;
+import com.barogo.api.auth.response.SignUpResponse;
 import com.barogo.api.auth.response.TokenResponse;
 import com.barogo.api.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -21,9 +22,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         authService.signUp(signUpRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SignUpResponse("회원가입이 완료되었습니다."));
     }
 
     @PostMapping("/login")

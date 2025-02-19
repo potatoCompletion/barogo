@@ -4,16 +4,17 @@ import com.barogo.api.auth.exception.InvalidCredentialException;
 import com.barogo.api.auth.exception.InvalidPasswordException;
 import com.barogo.api.auth.exception.PasswordPolicyViolationException;
 import com.barogo.api.auth.exception.UserIdDuplicatedException;
+import com.barogo.api.auth.jwt.JwtTokenProvider;
 import com.barogo.api.auth.request.LoginRequest;
 import com.barogo.api.auth.request.SignUpRequest;
 import com.barogo.api.auth.response.TokenResponse;
 import com.barogo.api.common.util.PasswordValidator;
 import com.barogo.api.user.domain.User;
 import com.barogo.api.user.repository.UserRepository;
-import com.barogo.api.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Transactional
     public void signUp(SignUpRequest signUpRequest) {
         // 중복 ID 검증
         if (userRepository.existsByUserId(signUpRequest.getUserId())) {
