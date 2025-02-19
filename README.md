@@ -14,6 +14,8 @@ password: (없음)
 
 ## API 명세서
 Spring Rest Docs로 구현했습니다.  
+프로젝트 최상단 api-document 라는 디렉터리에 API명세서.html 파일로 미리 작성해놨습니다.  
+아래 실행방법으로도 가능합니다.
 
 ### 실행방법
 1. /gradlew clean build
