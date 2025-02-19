@@ -10,6 +10,6 @@ DB: H2
 Spring Rest Docs로 구현했습니다.  
 
 ### 실행방법
-1. localhost:8080/docs/index.html 접속
-2. src/main/resources/static/docs/index.html 정적 페이지 파일
+1. /gradlew clean build
+2. localhost:8080/docs/index.html 접속 or src/main/resources/static/docs/index.html 파일 확인
 

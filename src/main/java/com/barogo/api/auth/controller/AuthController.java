@@ -21,12 +21,22 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * 회원가입 API
+     * @param signUpRequest 회원가입 요청 정보
+     * @return 회원가입 성공 메세지
+     */
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         authService.signUp(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SignUpResponse("회원가입이 완료되었습니다."));
     }
 
+    /**
+     * 로그인 API
+     * @param loginRequest 로그인 요청 정보
+     * @return 로그인 성공 메세지
+     */
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));

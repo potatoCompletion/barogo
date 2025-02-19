@@ -66,6 +66,18 @@ asciidoctor {
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
 	dependsOn test
+
+	outputs.upToDateWhen { false }
+}
+
+tasks.register('copyDocs', Copy) {
+	dependsOn asciidoctor
+	from asciidoctor.outputDir
+	into "src/main/resources/static/docs"
+}
+
+tasks.named('build') {
+	dependsOn copyDocs
 }
 
 bootJar {

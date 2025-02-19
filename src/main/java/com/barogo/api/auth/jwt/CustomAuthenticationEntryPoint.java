@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * Security 인증 예외 처리 클래스
+ */
 @RequiredArgsConstructor
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {

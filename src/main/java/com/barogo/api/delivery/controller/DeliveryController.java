@@ -20,6 +20,12 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
+    /**
+     * 배달 조회 API
+     * @param userDetails 로그인한 유저 정보
+     * @param request 배달 조회 요청 정보
+     * @return DeliveryResponse 페이지
+     */
     @GetMapping
     public ResponseEntity<Page<DeliveryResponse>> getUserDeliveries(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -29,6 +35,13 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveries);
     }
 
+    /**
+     * 배달 주문 수정 API
+     * @param userDetails 로그인한 유저 정보
+     * @param deliveryId 수정할 배달 ID (PathVariable)
+     * @param request 수정 요청 정보
+     * @return 수정 성공 메세지
+     */
     @PatchMapping("/{deliveryId}")
     public ResponseEntity<DeliveryUpdateResponse> updateDelivery(
             @AuthenticationPrincipal UserDetails userDetails,
