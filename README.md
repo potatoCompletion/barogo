@@ -19,3 +19,5 @@ Spring Rest Docs로 구현했습니다.
 1. /gradlew clean build
 2. **localhost:8080/docs/index.html** 접속 or **src/main/resources/static/docs/index.html** 파일 확인
 
+---
+시간 내주셔서 감사합니다.
