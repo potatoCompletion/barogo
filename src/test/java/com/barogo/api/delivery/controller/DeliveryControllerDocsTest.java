@@ -120,6 +120,7 @@ public class DeliveryControllerDocsTest {
                         responseFields(
                                 fieldWithPath("content").description("배달 목록 데이터 배열"),
                                 fieldWithPath("content[].id").description("배달 ID"),
+                                fieldWithPath("content[].userName").description("주문 회원 이름"),
                                 fieldWithPath("content[].destination").description("배달 도착지 주소"),
                                 fieldWithPath("content[].status").description("배달 상태 (COMPLETED, PENDING 등)"),
                                 fieldWithPath("content[].orderDateTime").description("배달 주문 날짜/시간"),
