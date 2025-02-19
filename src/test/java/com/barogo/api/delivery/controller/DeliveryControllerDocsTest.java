@@ -90,7 +90,8 @@ public class DeliveryControllerDocsTest {
     }
 
     @Test
-    void 배달_조회_테스트() throws Exception {
+    @DisplayName("Spring Rest Docs - 배달 조회")
+    void 문서생성_배달조회() throws Exception {
         // given
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
@@ -151,8 +152,8 @@ public class DeliveryControllerDocsTest {
     }
 
     @Test
-    @DisplayName("배달 주문 수정 API - 정상 요청")
-    void 배달_주문_수정_테스트() throws Exception {
+    @DisplayName("Spring Rest Docs - 배달 주문 수정")
+    void 문서생성_배달주문수정() throws Exception {
         // given
         Delivery delivery = Delivery.builder()
                 .user(testUser)

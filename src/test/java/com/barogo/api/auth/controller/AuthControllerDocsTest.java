@@ -6,6 +6,7 @@ import com.barogo.api.user.domain.User;
 import com.barogo.api.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -45,7 +46,8 @@ public class AuthControllerDocsTest {
     }
 
     @Test
-    void signUp() throws Exception {
+    @DisplayName("Spring Rest Docs - 회원가입")
+    void 문서생성_회원가입() throws Exception {
 
         SignUpRequest request = SignUpRequest.builder()
                 .userId("testuser")
@@ -75,7 +77,8 @@ public class AuthControllerDocsTest {
     }
 
     @Test
-    void login() throws Exception {
+    @DisplayName("Spring Rest Docs - 로그인")
+    void 문서생성_로그인() throws Exception {
         User user = User.builder()
                 .userId("testuser")
                 .password(passwordEncoder.encode("password123!@#"))
