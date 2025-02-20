@@ -35,7 +35,7 @@ public class AuthController {
     /**
      * 로그인 API
      * @param loginRequest 로그인 요청 정보
-     * @return 로그인 성공 메세지
+     * @return JWT 액세스 토큰
      */
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
